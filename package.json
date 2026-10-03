@@ -1,5 +1,5 @@
 {
-  "name": "dsh-hooks-panel",
+  "name": "dsh-hook",
   "description": "Hooks settings panel for the DSH GUI: list configured lifecycle hooks (hooks.json) with events, matchers, commands and status, in a first-level settings section — modeled after Codex Desktop's hooks page. Auto-probes ~/.claude/hooks.json / ~/.codex/hooks.json / $DSH_HOME/hooks.json",
   "version": "0.1.1",
   "icon": "icon.svg",
@@ -42,6 +42,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mikazuhe13-ui/dsh-hooks-panel"
+    "url": "https://github.com/mikazuhe13-ui/dsh-hook"
   }
 }

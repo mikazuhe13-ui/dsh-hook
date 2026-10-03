@@ -1,4 +1,4 @@
-# 钩子面板（dsh-hooks-panel）
+# 钩子面板（dsh-hook）
 
 DSH（DeepSeek Harness）的生命周期钩子设置面板插件 —— 在设置界面列出已配置的钩子（`hooks.json`）：事件、matcher、命令、超时与状态信息，风格对齐 Codex Desktop 的钩子页。
 
@@ -22,17 +22,17 @@ DSH（DeepSeek Harness）的生命周期钩子设置面板插件 —— 在设�
 1. `package.json` 的 `dependencies` 加：
 
 ```json
-"dsh-hooks-panel": "github:<你的用户名>/dsh-hooks-panel"
+"dsh-hook": "github:<你的用户名>/dsh-hook"
 ```
 
-2. `dsh.profile.bundles` 数组加 `"dsh-hooks-panel"`
+2. `dsh.profile.bundles` 数组加 `"dsh-hook"`
 3. 运行 `pnpm install`
 4. 重启 DSH
 
 ### 方式二：本地 link 开发
 
 ```json
-"dsh-hooks-panel": "link:D:/path/to/dsh-hooks-panel"
+"dsh-hook": "link:D:/path/to/dsh-hook"
 ```
 
 > ⚠️ pnpm 对 scope 名 + `link:` 组合会报 `ERR_PNPM_INVALID_DEPENDENCY_NAME`，请用无 scope 包名。
@@ -44,7 +44,7 @@ DSH（DeepSeek Harness）的生命周期钩子设置面板插件 —— 在设�
 ```yaml
 - insert:
     - id: hooks-panel
-      name: 'dsh-hooks-panel'
+      name: 'dsh-hook'
       config:
         hooksPath: 'D:\my\dsh-home\hooks.json'
 ```
@@ -68,7 +68,7 @@ DSH（DeepSeek Harness）的生命周期钩子设置面板插件 —— 在设�
 ```
 ┌─ lib/index.js（宿主半）─────────────────────┐
 │ 读 hooks.json（显式 hooksPath 或自动探测）    │
-│ 注册 GET /api/dsh-hooks-panel/overview       │
+│ 注册 GET /api/dsh-hook/overview       │
 └──────────────────────────────────────────────┘
               ↓ fetch（仅页面打开时 15s 轮询）
 ┌─ lib/client.js（客户端半）──────────────────┐

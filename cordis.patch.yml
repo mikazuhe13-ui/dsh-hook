@@ -1,10 +1,10 @@
-# dsh-hooks-panel bundle patch: inserts its plugin row into the web plugin roster.
+# dsh-hook bundle patch: inserts its plugin row into the web plugin roster.
 # Single row mounts BOTH halves: the host side (reads hooks.json via a loopback
 # JSON route) and the browser side (the settings section).
 #
 # hooksPath (optional): where your hooks.json lives. When omitted, the plugin
 # auto-probes $DSH_HOME/hooks.json, ~/.claude/hooks.json, ~/.codex/hooks.json.
 - insert:
-    - id: hooks-panel
-      name: 'dsh-hooks-panel'
+    - id: dsh-hook
+      name: 'dsh-hook'
       config: {}
