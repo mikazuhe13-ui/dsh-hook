@@ -1,12 +1,9 @@
 # dsh-hooks-panel bundle patch: inserts its plugin row into the web plugin roster.
-# Single row mounts BOTH halves: the host side (reads hooks.json + hook-run state
-# via a loopback JSON route) and the browser side (the settings section).
+# Single row mounts BOTH halves: the host side (reads hooks.json via a loopback
+# JSON route) and the browser side (the settings section).
 #
-# hooksPath: where your hooks.json lives. Common locations:
-#   - DSH default:            <dsh-home>/hooks.json        (shown below as %DSH_HOME%)
-#   - Claude Code:            ~/.claude/hooks.json
-#   - Codex CLI:              ~/.codex/hooks.json
-# Omit hooksPath to auto-probe: <dsh-home>/hooks.json, then ~/.claude/hooks.json, ~/.codex/hooks.json.
+# hooksPath (optional): where your hooks.json lives. When omitted, the plugin
+# auto-probes $DSH_HOME/hooks.json, ~/.claude/hooks.json, ~/.codex/hooks.json.
 - insert:
     - id: hooks-panel
       name: 'dsh-hooks-panel'
