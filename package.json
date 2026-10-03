@@ -1,0 +1,46 @@
+{
+  "name": "dsh-hooks-panel",
+  "description": "Hooks settings panel for the DSH GUI: list configured lifecycle hooks (hooks.json) with events, matchers, commands and status, in a first-level settings section — modeled after Codex Desktop's hooks page. Auto-probes ~/.claude/hooks.json / ~/.codex/hooks.json / $DSH_HOME/hooks.json",
+  "version": "0.1.0",
+  "icon": "icon.svg",
+  "type": "module",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/**/*.js",
+    "examples",
+    "cordis.patch.yml",
+    "icon.svg"
+  ],
+  "license": "MIT",
+  "dsh": {
+    "engines": {
+      "dsh": ">=0.2.0-rc.1"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-renderer"
+      ],
+      "platform": "web"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh": ">=0.2.0-rc.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikazuhe13-ui/dsh-hooks-panel"
+  }
+}
