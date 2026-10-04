@@ -55,8 +55,8 @@ process.stdin.on('end', () => {
   if (on('recursion') && !hitsTemp && /remove-item/i.test(cmd) && /-recurse/i.test(cmd) && /(node_modules|\.bsk|profiles|skills)/i.test(cmd)) {
     block = 'hook-guard: 递归删除触及受保护目录。若是 junction，Remove-Item -Recurse 会穿透删掉目标本体——用 [System.IO.Directory]::Delete(path) 只删链接。';
   }
-  // 2. 写 C 盘非白名单路径（write/edit）
-  if (!block && on('cWrite') && (tool === 'write' || tool === 'edit') && /[a-zA-Z]:\\(?!(deepseek harness|DSH备份|_学业|_下载|_项目|_工具|tools|npm-global|Users\\ASUS\\AppData\\Local\\Temp))/i.test(cmd)) {
+  // 2. 写 C 盘非白名单路径（write/edit）。只针对 C 盘——其他盘符（尤其 D 盘工作区）放行。
+  if (!block && on('cWrite') && (tool === 'write' || tool === 'edit') && /^[cC]:\\(?!(deepseek harness|DSH备份|_学业|_下载|_项目|_工具|tools|npm-global|Users\\ASUS\\AppData\\Local\\Temp))/i.test(cmd)) {
     block = 'hook-guard: 磁盘纪律——新文件默认放 D 盘工作区，不写 C 盘。';
   }
   // 3. 环境变量枚举（DSH 剥疑似密钥变量，结论不可信）
@@ -103,7 +103,8 @@ function logRun(decision, tool, cmd, reason) { if (process.env.HOOK_GUARD_DEBUG)
       if (Array.isArray(parsed?.runs)) runs = parsed.runs;
     } catch {}
     runs.unshift({
-      time: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 19),
+      // ISO-8601 带 Z（UTC）：无时区歧义，消费端 new Date() 直接正确解析
+      time: new Date().toISOString(),
       decision,
       tool,
       // 只留命令首行 + 截断，避免统计文件膨胀
