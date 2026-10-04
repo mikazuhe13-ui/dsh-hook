@@ -1,7 +1,7 @@
 // hook-guard.mjs — PreToolUse 守卫（node 版，~55ms，规则级开关实时生效，JSON 决策协议）
 // 用法：hooks.json 的 PreToolUse command 指向本文件：
 //   node "D:/deepseek harness/dsh-data/scripts/hook-guard.mjs"
-// 规则开关：<dsh-home>/hooks-rules.json（recursion/cWrite/envProbe/bskJunction，缺省 true）
+// 规则开关：<dsh-home>/hooks-rules.json（recursion/cWrite/envProbe，缺省 true）
 //   设置界面的钩子面板（dsh-hook 插件）可读写这个文件，实时生效无需重启。
 // 决策协议：exit 2 + stderr 在部分桥实现里不被当作阻塞（记录为 hook 失败）；
 //   改用 **stdout JSON 决策**（claude-code 协议标准）：blocked 时 stdout 输出
@@ -51,7 +51,9 @@ process.stdin.on('end', () => {
   let block = null;
   const hitsTemp = /\$env:TEMP|%TEMP%|AppData\\Local\\Temp/i.test(cmd);
 
-  // 1. 递归删除触及受保护目录（junction 穿透）
+  // 1. 递归删除触及受保护目录（junction 穿透；含 .bsk / node_modules / profiles / skills）
+  //    🔴 曾有独立的「.bsk Junction 保护」规则，与这里完全重叠（正则已含 \.bsk）——
+  //    已删（重复 owner，两个开关管同一件事）。.bsk 由本规则统一覆盖。
   if (on('recursion') && !hitsTemp && /remove-item/i.test(cmd) && /-recurse/i.test(cmd) && /(node_modules|\.bsk|profiles|skills)/i.test(cmd)) {
     block = 'hook-guard: 递归删除触及受保护目录。若是 junction，Remove-Item -Recurse 会穿透删掉目标本体——用 [System.IO.Directory]::Delete(path) 只删链接。';
   }
@@ -62,10 +64,6 @@ process.stdin.on('end', () => {
   // 3. 环境变量枚举（DSH 剥疑似密钥变量，结论不可信）
   if (!block && on('envProbe') && /Get-ChildItem\s+Env:|Get-Item\s+Env:|\[Environment\]::GetEnvironmentVariable/.test(cmd)) {
     block = 'hook-guard: 工具子进程的环境变量枚举结果不可信（疑似密钥变量被剥掉）。';
-  }
-  // 4. .bsk junction 上的 -Recurse
-  if (!block && on('bskJunction') && !hitsTemp && /remove-item/i.test(cmd) && /-recurse/i.test(cmd) && /\.bsk/i.test(cmd)) {
-    block = 'hook-guard: .bsk 是 Junction。Remove-Item -Recurse 会穿透删掉目标本体，用 cmd /c rmdir 只删链接。';
   }
 
   if (block) {

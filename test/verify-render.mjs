@@ -52,12 +52,11 @@ const docData = {
     { event: 'PreToolUse', matcher: 'pwsh|Bash|write|edit', command: 'node "D:/.../hook-guard.mjs"', timeout: 10, statusMessage: '守卫', type: 'command' },
     { event: 'PostToolUse', matcher: 'pwsh', command: 'node "D:/.../hook-log.mjs"', timeout: 5, statusMessage: null, type: 'command' },
   ],
-  rules: { recursion: true, cWrite: true, envProbe: true, bskJunction: true },
+  rules: { recursion: true, cWrite: true, envProbe: true },
   ruleKeys: [
     { key: 'recursion', label: '递归删除保护', desc: '...' },
     { key: 'cWrite', label: 'C 盘写入保护', desc: '...' },
     { key: 'envProbe', label: '环境变量枚举拦截', desc: '...' },
-    { key: 'bskJunction', label: '.bsk Junction 保护', desc: '...' },
   ],
   runs: [
     { time: '2026-10-04T13:01:47', decision: 'allow', tool: 'pwsh', cmd: 'echo final-check' },
