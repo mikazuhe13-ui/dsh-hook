@@ -103,7 +103,7 @@ function logRun(decision, tool, cmd, reason) { if (process.env.HOOK_GUARD_DEBUG)
       if (Array.isArray(parsed?.runs)) runs = parsed.runs;
     } catch {}
     runs.unshift({
-      time: new Date().toISOString(),
+      time: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 19),
       decision,
       tool,
       // 只留命令首行 + 截断，避免统计文件膨胀
