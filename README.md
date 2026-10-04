@@ -6,7 +6,7 @@ DSH（DeepSeek Harness）的生命周期钩子设置面板插件 —— 在设�
 
 ## 功能
 
-- **一级“钩子”设置 section**：侧栏设置页新增“钩子”入口
+- **7 事件全覆盖**：SessionStart（含会话上下文注入示例脚本）/ PreToolUse / PostToolUse / UserPromptSubmit / Stop / SubagentStart / SubagentStop——面板按固定顺序显示全部事件（未配置的灰色提示）\n- **一级“钩子”设置 section**：侧栏设置页新增“钩子”入口
 - **按事件分组显示**：PreToolUse / PostToolUse / SessionStart / UserPromptSubmit / Stop / SubagentStart / SubagentStop
 - **每条钩子显示**：statusMessage、完整命令、matcher、timeout、类型
 - **自动探测 hooks.json**：按 `$DSH_HOME/hooks.json` → `~/.claude/hooks.json` → `~/.codex/hooks.json` 顺序探测；也可在插件配置里显式指定 `hooksPath`
