@@ -17,7 +17,7 @@
 |---|---|---|---|
 | 1 | 🔴 致命 | `relTime` 未定义 → 运行状态卡渲染抛 `ReferenceError`，**整个面板所有卡片全部空白** | 实测 |
 | 2 | 🟠 高 | `/overview` 不返回 `ruleKeys` → 规则卡永远走中文硬编码回退，**英文界面失效** | 实测 |
-| 3 | 🟠 高 | 仓库只提交编译产物 `lib/client.js`，**无 `src/` TS 源码** | 实测 |
+| 3 | 🟠 高 | ~~仓库只提交编译产物~~ → **更正：`lib/*.js` 就是手写源码**，误导性 region 注释已删（v0.3.2） | 实测+更正 |
 | 4 | 🟡 中 | `cWrite` 正则 `[a-zA-Z]:\\` 匹配**任意盘符**，误拦 D 盘非白名单路径 | 实测 |
 | 5 | 🟡 中 | `time` 无时区标记，跨时区消费端会算错 | 实测+推算 |
 | 6 | 🟡 中 | README 第 9 行存在字面量 `\n`，未渲染为换行 | 实测 |
@@ -248,7 +248,7 @@ node -e "relTime('2026-10-04T13:01:47')"     # ReferenceError
 |---|---|---|---|---|
 | 1 | `relTime` 未定义 | ✅ 已修 | `lib/client.js` 补定义：类型守卫 + 非法值返回 `''`，绝不抛异常；文案走 `t()` 双语 | `test/verify-render.mjs`：渲染不再抛异常，10 张卡全渲染 |
 | 2 | 缺 `ruleKeys` | ✅ 已修 | `lib/index.js` 的 `buildDoc` 返回 `ruleKeys: RULE_KEYS`；客户端标签/描述改走 `zh`/`en` 字典 | `test/verify-host.mjs`：端点含 `ruleKeys` 且与 `rules` 键一致 |
-| 3 | 无 `src/` 源码 | ⚠️ 未根治 | README 已加「构建说明」警示。**仍建议把 `src/` + 构建脚本提交** | — |
+| 3 | 「无 `src/` 源码」的判断 | ✅ 已更正 | **审计时误判**：`lib/*.js` 本来就是**手写源码**（本插件不走 TS 构建链），`//#region src/client/index.ts` 只是残留的编辑器 region 标记，非编译产物标记——v0.3.2 已删 | README 源码说明已更正 |
 | 4 | `cWrite` 拦任意盘符 | ✅ 已修 | `[a-zA-Z]:\\` → `^[cC]:\\` | `test/verify-cwrite.mjs`：8/8，D/E 盘放行 |
 | 5 | 时间戳无时区 | ✅ 已修 | guard 改写 `new Date().toISOString()`（带 `Z`） | 渲染样本：UTC 串正确显示为「刚刚」 |
 | 6 | README 字面量 `\n` | ✅ 已修 | 拆成两个真实列表项 | — |
@@ -267,8 +267,10 @@ node -e "relTime('2026-10-04T13:01:47')"     # ReferenceError
 
 ### 补充教训
 
-- **`lib/client.js` 是编译产物**（头部 `//#region src/client/index.ts`）却充当唯一真源 ——
-  问题 1 正是「源改了、产物没同步」的产物。根治需恢复 `src/`。
+- ~~`lib/client.js` 是编译产物~~ → **更正（v0.3.2 复核）**：它本来就是**手写源码**（本插件
+  不走 TS 构建链，`//#region src/client/index.ts` 只是残留的编辑器 region 标记）。
+  问题 1 的真实教训不是「构建链断了」，而是**改代码必须跑回归测试**——
+  `test/verify-render.mjs` 正是这个防线。
 - 排查中出现一次假 FAIL：测试脚本反斜杠转义写多了（`String.raw` 可避免），
   并非代码缺陷 —— 说明**验证脚本本身也要用真实输入形态**（真实 Windows 路径是单反斜杠）。
 

@@ -1,0 +1,13 @@
+chore: v0.3.2 — remove misleading compiled-output markers, correct audit #3
+
+- lib/client.js: remove the leftover `//#region src/client/index.ts` editor
+  region markers. They looked like compiled-output markers, but this file is
+  handwritten source (the plugin has no TS build chain) — the markers misled
+  the v0.3.1 audit into prescribing a src/ + build-chain "fix".
+- lib/index.js: (no change in this commit beyond v0.3.1's stale-key pruning)
+- README: "构建说明" rewritten as "源码说明" — lib/*.js IS the handwritten
+  source, edit it directly; the regression guard is test/, not a build chain.
+- AUDIT.md: finding #3 corrected from "compiled-only lib/" to "audit misread;
+  region markers removed"; the real lesson for finding #1 is "run the
+  regression suite after edits", not "restore src/".
+- package.json: version 0.3.2.

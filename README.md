@@ -78,12 +78,12 @@ DSH（DeepSeek Harness）的生命周期钩子设置面板插件 —— 在设�
 └──────────────────────────────────────────────┘
 ```
 
-> ⚠️ **构建说明（重要）**：本仓库目前**只提交编译产物** `lib/client.js`
-> （文件头有 `//#region src/client/index.ts` 标记），**`src/` TypeScript 源码未纳入版本控制**。
-> 因此 `lib/*.js` 是**唯一真源**，请直接编辑它们。
-> 历史教训：v0.3.1 曾因「源码改了、产物没同步」导致 `relTime` 只有调用点而无定义，
-> 使运行状态卡抛 `ReferenceError` 并拖垮整个面板（详见 `AUDIT.md`）。
-> **建议后续把 `src/` 与构建脚本一并提交**，恢复可重建性。
+> ℹ️ **源码说明**：`lib/client.js` 与 `lib/index.js` 就是**手写源码**（本插件不走 TypeScript
+> 构建链，直接手写 `__ModuleLoader__.load` 形态，参考 `@linxin666/dsh-usage`）。
+> v0.3.1 之前文件头曾带 `//#region src/client/index.ts` 注释，那只是残留的编辑器
+> region 标记，**不是**编译产物标记——已删（v0.3.2），避免误导。
+> 历史教训：v0.3.1 的 `relTime` 只有调用点而无定义，曾拖垮整个面板
+> （详见 `AUDIT.md`）。回归防线 = 仓库内 `test/` 验证脚本（见下节）。
 
 ## 测试
 
